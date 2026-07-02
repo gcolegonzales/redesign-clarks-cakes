@@ -165,18 +165,6 @@ img, svg { display: block; max-width: 100%; }
 .hero-badge-num span { font-size: 1.1rem; vertical-align: super; }
 .hero-badge-txt { font-family: var(--sans); font-size: .58rem; text-transform: uppercase; letter-spacing: .18em; }
 
-/* Marquee */
-.hero-marquee { border-block: 1px solid color-mix(in srgb, var(--gold) 45%, transparent); overflow: hidden; background: var(--paper); }
-.marquee-track {
-  display: inline-flex; align-items: center; gap: 1.4rem; white-space: nowrap;
-  padding-block: .85rem; font-family: var(--serif); font-style: italic;
-  font-size: 1.35rem; color: var(--ink-soft);
-  animation: marquee 34s linear infinite; will-change: transform;
-}
-.marquee-track .dot { color: var(--rose); font-style: normal; }
-@keyframes marquee { to { transform: translateX(-50%); } }
-@media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } }
-
 /* ============================================================
    Section head shared
    ============================================================ */
