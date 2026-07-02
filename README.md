@@ -33,6 +33,12 @@ Art direction: **elegant editorial patisserie** — warm cream, dusty rose & sag
 - **Reviews** — testimonial quotes are labeled illustrative; swap in real Google/Facebook reviews.
 - **Hours** — no posted hours were confirmed (`<!-- TODO: confirm posted hours -->`); currently shown as "by appointment."
 
+## SEO
+
+On-page SEO is wired for local search: unique `<title>` + meta description, a single `<h1>`, JSON-LD `Bakery` structured data (name, telephone, address, opening hours, price range, image, url, areaServed, and `sameAs` Facebook/Instagram), complete Open Graph + Twitter Card tags, a `<link rel="canonical">`, plus `robots.txt` and `sitemap.xml` at the repo root.
+
+**Base URL placeholder:** every absolute URL — canonical, `og:url`, the JSON-LD `url`/`image`, `robots.txt`, and `sitemap.xml` — uses the literal placeholder `https://REPLACE-WITH-DOMAIN.com/`. At deploy, do a one-line find-and-replace of `https://REPLACE-WITH-DOMAIN.com/` with the real domain across `index.html`, `robots.txt`, and `sitemap.xml`. (An `assets/og-image.jpg` share image is referenced but still needs to be dropped in.)
+
 ## How to view
 
 Open `index.html` by double-clicking it — no build step, no dependencies (one Google Fonts `<link>`; everything else is self-contained).
