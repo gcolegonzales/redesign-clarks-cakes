@@ -37,7 +37,7 @@ Art direction: **elegant editorial patisserie** — warm cream, dusty rose & sag
 
 On-page SEO is wired for local search: unique `<title>` + meta description, a single `<h1>`, JSON-LD `Bakery` structured data (name, telephone, address, opening hours, price range, image, url, areaServed, and `sameAs` Facebook/Instagram), complete Open Graph + Twitter Card tags, a `<link rel="canonical">`, plus `robots.txt` and `sitemap.xml` at the repo root.
 
-**Base URL placeholder:** every absolute URL — canonical, `og:url`, the JSON-LD `url`/`image`, `robots.txt`, and `sitemap.xml` — uses the literal placeholder `https://REPLACE-WITH-DOMAIN.com/`. At deploy, do a one-line find-and-replace of `https://REPLACE-WITH-DOMAIN.com/` with the real domain across `index.html`, `robots.txt`, and `sitemap.xml`. (An `assets/og-image.jpg` share image is referenced but still needs to be dropped in.)
+**Base URL placeholder:** every absolute URL — canonical, `og:url`, the JSON-LD `url`/`image`, `robots.txt`, and `sitemap.xml` — uses the literal placeholder `https://clarkscakes.com/`. At deploy, do a one-line find-and-replace of `https://clarkscakes.com/` with the real domain across `index.html`, `robots.txt`, and `sitemap.xml`. (An `assets/og-image.jpg` share image is referenced but still needs to be dropped in.)
 
 ## How to view
 
