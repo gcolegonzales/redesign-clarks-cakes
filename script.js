@@ -30,26 +30,108 @@
   onScroll();
 
   /* ---- Mobile nav ---- */
-  function closeNav() {
+  var DESKTOP = 941; // >940px is the desktop nav (drawer lives in max-width:940px)
+  var navOpen = false;
+
+  function drawerLinks() {
+    return Array.prototype.slice.call(navMenu.querySelectorAll('a'));
+  }
+  // Keep off-canvas links out of the tab order whenever the drawer is closed
+  // or we're at desktop widths (where the menu is the inline desktop nav).
+  function syncDrawerTabbability() {
+    var mobile = window.innerWidth < DESKTOP;
+    // Only hide links from the tab order when the drawer is the off-canvas
+    // panel (mobile) AND it is closed. At desktop widths the same <ul> is the
+    // inline nav and must stay tabbable.
+    var hide = mobile && !navOpen;
+    drawerLinks().forEach(function (a) {
+      if (hide) a.setAttribute('tabindex', '-1');
+      else a.removeAttribute('tabindex');
+    });
+  }
+
+  function setInert(on) {
+    // Mark everything except the header inert while the drawer is open.
+    Array.prototype.forEach.call(document.body.children, function (el) {
+      if (el === header) return;
+      if (on) { el.setAttribute('inert', ''); el.setAttribute('aria-hidden', 'true'); }
+      else { el.removeAttribute('inert'); el.removeAttribute('aria-hidden'); }
+    });
+  }
+
+  function closeNav(restoreFocus) {
+    if (!navOpen) return;
+    navOpen = false;
     navDrawer.classList.remove('open');
     navToggle.setAttribute('aria-expanded', 'false');
+    navToggle.setAttribute('aria-label', 'Open menu');
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+    setInert(false);
+    syncDrawerTabbability();
+    if (restoreFocus !== false) navToggle.focus();
   }
   function openNav() {
+    if (navOpen) return;
+    navOpen = true;
     navDrawer.classList.add('open');
     navToggle.setAttribute('aria-expanded', 'true');
+    navToggle.setAttribute('aria-label', 'Close menu');
     header.classList.remove('header-hidden');
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    setInert(true);
+    syncDrawerTabbability();
+    var links = drawerLinks();
+    if (links.length) links[0].focus();
   }
   if (navToggle) {
+    navToggle.setAttribute('aria-label', 'Open menu');
+    syncDrawerTabbability();
+
     navToggle.addEventListener('click', function () {
-      if (navDrawer.classList.contains('open')) closeNav();
+      if (navOpen) closeNav();
       else openNav();
     });
     navMenu.addEventListener('click', function (e) {
       if (e.target.tagName === 'A') closeNav();
     });
-    if (navScrim) navScrim.addEventListener('click', closeNav);
+    if (navScrim) navScrim.addEventListener('click', function () { closeNav(); });
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') closeNav();
+      if (!navOpen) return;
+      if (e.key === 'Escape') { closeNav(); return; }
+      if (e.key === 'Tab') {
+        // Trap Tab within the toggle + drawer links.
+        var focusables = [navToggle].concat(drawerLinks());
+        var first = focusables[0];
+        var last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault(); last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault(); first.focus();
+        } else if (focusables.indexOf(document.activeElement) === -1) {
+          e.preventDefault(); first.focus();
+        }
+      }
+    });
+
+    // Reset drawer + toggle state when crossing the desktop breakpoint.
+    var wasDesktop = window.innerWidth >= DESKTOP;
+    window.addEventListener('resize', function () {
+      var isDesktop = window.innerWidth >= DESKTOP;
+      if (isDesktop && navOpen) closeNav(false);
+      if (isDesktop !== wasDesktop) { wasDesktop = isDesktop; syncDrawerTabbability(); }
+    });
+  }
+
+  /* ---- Brand / logo scroll-to-top (the #top anchor was a no-op) ---- */
+  var brand = document.querySelector('.brand');
+  if (brand) {
+    brand.addEventListener('click', function (e) {
+      e.preventDefault();
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+      header.classList.remove('header-hidden');
     });
   }
 
