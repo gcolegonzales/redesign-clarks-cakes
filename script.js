@@ -63,6 +63,7 @@
     if (!navOpen) return;
     navOpen = false;
     navDrawer.classList.remove('open');
+    document.documentElement.classList.remove('nav-is-open');
     navToggle.setAttribute('aria-expanded', 'false');
     navToggle.setAttribute('aria-label', 'Open menu');
     document.documentElement.style.overflow = '';
@@ -75,6 +76,7 @@
     if (navOpen) return;
     navOpen = true;
     navDrawer.classList.add('open');
+    document.documentElement.classList.add('nav-is-open');
     navToggle.setAttribute('aria-expanded', 'true');
     navToggle.setAttribute('aria-label', 'Close menu');
     header.classList.remove('header-hidden');
@@ -83,7 +85,8 @@
     setInert(true);
     syncDrawerTabbability();
     var links = drawerLinks();
-    if (links.length) links[0].focus();
+    // preventScroll: focusing the first link must not scroll/jump the page.
+    if (links.length) links[0].focus({ preventScroll: true });
   }
   if (navToggle) {
     navToggle.setAttribute('aria-label', 'Open menu');

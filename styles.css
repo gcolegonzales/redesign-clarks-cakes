@@ -335,6 +335,16 @@ section { padding-block: clamp(3.5rem, 8vw, 7rem); }
   .site-header { backdrop-filter: none; background: color-mix(in srgb, var(--cream) 94%, transparent); }
   .scrolled.site-header { background: var(--cream); }
 
+  /* When the drawer is open we scroll-lock via overflow:hidden, which breaks
+     position:sticky and would drop the header (and its toggle/close control)
+     back to the top of the document — off-screen when opened after scrolling.
+     Pin the header to the viewport top while open so the X close control is
+     ALWAYS visible and tappable at any scroll position. */
+  .nav-is-open .site-header {
+    position: fixed; top: 0; left: 0; right: 0;
+    transform: none !important;
+  }
+
   .nav-toggle {
     display: inline-flex; flex-direction: column; justify-content: center;
     width: 44px; height: 44px; background: transparent; border: 0; cursor: pointer; gap: 5px; padding: 0; align-items: center;
@@ -380,11 +390,23 @@ section { padding-block: clamp(3.5rem, 8vw, 7rem); }
   .nav-cta { width: 100%; text-align: center; }
 }
 
+@media (max-width: 640px) {
+  /* Mobile top-of-page: the wine "20+ years of cakes" badge is anchored to the
+     bottom of the (tall) hero photo, which on mobile lands right under the sticky
+     header and gets clipped/cramped. Hide it on phones; keep it on desktop.
+     After hiding, tighten the hero-photo -> copy rhythm so the headline leads
+     cleanly with intentional spacing. */
+  .hero-badge { display: none; }
+  .hero { padding-top: clamp(1.25rem, 4vw, 2rem); }
+  .hero-grid { gap: clamp(1.5rem, 5vw, 2.5rem); padding-bottom: clamp(2rem, 6vw, 3rem); }
+  .hero-photo { margin-bottom: .25rem; }
+  .hero h1 { margin: .15rem 0 1.2rem; }
+}
+
 @media (max-width: 560px) {
   .work-grid { grid-template-columns: 1fr; }
   .gallery-grid { grid-template-columns: 1fr 1fr; grid-auto-rows: 150px; }
   .g-tall { grid-row: span 1; }
   .field-row { grid-template-columns: 1fr; }
-  .hero-badge { width: 88px; height: 88px; left: 0; }
   .footer-bottom { flex-direction: column; }
 }
